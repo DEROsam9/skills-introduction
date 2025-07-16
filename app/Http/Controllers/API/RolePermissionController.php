@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Response;
+
 
 class RolePermissionController extends Controller
 {
@@ -14,17 +16,14 @@ class RolePermissionController extends Controller
      public function assignRole(Request $request, $userId)
     {
         $request->validate([
-            'role' => 'required|string|exists:roles,name',
+            'roles' => 'required|array',
+            'role. *' => 'required|string|exists:roles,name',
         ]);
 
         $user = User::findOrFail($userId);
-        $role = Role::where('name', $request->role)->first();
 
-        if ($user->hasRole($role)) {
-            return response()->json(['message' => 'User already has this role'], 400);
-        }
 
-        $user->assignRole($role);
+        $user->assignRole($request->roles);
 
         return response()->json(['message' => 'Role assigned successfully']);
     }
@@ -68,6 +67,35 @@ class RolePermissionController extends Controller
 
         return response()->json(['message' => 'Role removed successfully']);
     }
+    
+
+    public function getUserRoles($userId)
+    {
+        $user = User::findOrFail($userId);
+        $roles = $user->getRoleNames(); // returns a collection of role names
+        return response()->json($roles);
+    }
+
+    public function getUserPermissions($userId)
+    {
+        $user = User::findOrFail($userId);
+        $permissions = $user->getPermissionNames(); // returns a collection of permission names
+        return response()->json($permissions);
+    }
+
+    public function getAllRoles()
+    {
+        $roles = Role::all(); // get all roles
+        return response()->json($roles);
+    }
+
+    public function getAllPermissions()
+    {
+        $permissions = Permission::all(); // get all permissions
+        return response()->json($permissions);
+    }
+
+
 }
   
 

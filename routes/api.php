@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\AuthTestController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\RolePermissionController;
 
@@ -36,6 +38,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/users/{id}/give-permission', [RolePermissionController::class, 'givePermission']);
     Route::post('/users/{id}/revoke-permission', [RolePermissionController::class, 'revokePermission']);
     Route::post('/users/{id}/remove-role', [RolePermissionController::class, 'removeRole']);
+    Route::get('/users/{id}/roles', [RolePermissionController::class, 'getUserRoles']);
+    Route::get('/users/{id}/permissions', [RolePermissionController::class, 'getUserPermissions']);
+    Route::get('/roles', [RolePermissionController::class, 'getAllRoles']);
+    Route::get('/permissions', [RolePermissionController::class, 'getAllPermissions']);
+    Route::get('/role', [RoleController::class, 'index']);
+
 });
 
 
@@ -48,3 +56,4 @@ Route::post('/logout', function(Request $request){
 
 
 
+Route::get('/test-token', action: [AuthTestController::class, 'getToken']);

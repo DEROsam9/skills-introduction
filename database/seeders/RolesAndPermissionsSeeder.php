@@ -35,7 +35,28 @@ class RolesAndPermissionsSeeder extends Seeder
             'guard_name' => 'api',
         ]);
 
+        $manager = Role::firstOrCreate([
+            'name'=> 'manager',
+            'guard_name' => 'api',
+        ]);
+
+        $finance = Role::firstOrCreate([
+            'name'=> 'finance',
+            'guard_name' => 'api',
+        ]);
+
+        $librarian = Role::firstOrCreate([
+            'name'=> 'librarian',
+            'guard_name' => 'api',
+        ]);
+
+
+
+
         // Assign permissions
+        $manager->givePermissionTo([$createPosts]);
+        $librarian->givePermissionTo([$createPosts]);
+        $finance->givePermissionTo([ $createPosts]);
         $admin->givePermissionTo([$createPosts, $editPosts]);
         $user->givePermissionTo($createPosts);
     }
